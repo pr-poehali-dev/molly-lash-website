@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -11,12 +11,34 @@ const Index = () => {
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+
+  const sectionRefs = {
+    services: useRef<HTMLDivElement>(null),
+    portfolio: useRef<HTMLDivElement>(null),
+    about: useRef<HTMLDivElement>(null),
+    reviews: useRef<HTMLDivElement>(null),
+    contacts: useRef<HTMLDivElement>(null),
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
+
+      const newVisibleSections = new Set<string>();
+      Object.entries(sectionRefs).forEach(([key, ref]) => {
+        if (ref.current) {
+          const rect = ref.current.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.8 && rect.bottom > 0) {
+            newVisibleSections.add(key);
+          }
+        }
+      });
+      setVisibleSections(newVisibleSections);
     };
+
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -48,25 +70,52 @@ const Index = () => {
   ];
 
   const portfolio = [
-    'https://cdn.poehali.dev/projects/34d4cf83-e594-4342-8e7d-4f436b037972/files/d8a41ba1-1d3c-4e3c-b358-727fcd80361f.jpg',
-    'https://cdn.poehali.dev/projects/34d4cf83-e594-4342-8e7d-4f436b037972/files/3da0c181-58b3-47d9-8ed7-c4000c79a177.jpg',
-    'https://cdn.poehali.dev/projects/34d4cf83-e594-4342-8e7d-4f436b037972/files/deb2eb41-ea7c-42d1-a68a-ee69f1cbe98b.jpg'
+    'https://cdn.poehali.dev/files/8ac4e0b1-d08b-4611-9dfc-df3e9eba6aad.jpg',
+    'https://cdn.poehali.dev/files/0b48cbed-aa51-4296-8d58-4cc7cc777ae1.jpg',
+    'https://cdn.poehali.dev/files/d0d53d71-35dc-477c-86ac-853443b6ab3f.jpg'
   ];
 
   const reviews = [
     {
-      name: 'Анна',
-      text: 'Невероятная работа! Реснички держатся уже месяц и выглядят как в первый день. Молли — настоящий профессионал!',
+      name: 'Наталия',
+      date: '7 августа',
+      service: 'Архитектура бровей',
+      text: 'Очень долго искала квалифицированного бровиста. И не ошиблась, когда нашла данного мастера. Брови идеальные, именно то, что хотела.',
       rating: 5
     },
     {
-      name: 'Мария',
-      text: 'Очень довольна результатом. Натуральный эффект, который я и хотела. Обязательно вернусь!',
+      name: 'Габсат',
+      date: '5 июля',
+      service: 'Архитектура бровей',
+      text: 'Была у Марии недавно, очень хорошая и общительная девушка ☺️ и бровями очень довольна 😊',
       rating: 5
     },
     {
-      name: 'Екатерина',
-      text: 'Лучший мастер в городе! Аккуратная работа, приятная атмосфера. Рекомендую всем подругам.',
+      name: 'Love',
+      date: '2 июня',
+      service: 'Архитектура бровей',
+      text: 'Очень приятная и общительная девушка, спасибо большое 🌹🌹🌹 советую всем.',
+      rating: 5
+    },
+    {
+      name: 'Ольга',
+      date: '3 июля',
+      service: 'Наращивание ресниц',
+      text: 'Отличный мастер, очень приятный в общении. Свою работу выполняет быстро и качественно. Спасибо Вика, за красоту, теперь только к тебе...',
+      rating: 5
+    },
+    {
+      name: 'Софья',
+      date: '20 мая',
+      service: 'Наращивание ресниц',
+      text: 'Если нужен красивый результат, быстрое качественное наращивание и вежливое приятное общение-девчонки, записывайтесь.',
+      rating: 5
+    },
+    {
+      name: 'Евгения Митрофанова',
+      date: '1 июля',
+      service: 'Наращивание ресниц',
+      text: 'Записала маму на наращивание ресниц к Виктория - мама в диком восторге) Огромное спасибо',
       rating: 5
     }
   ];
@@ -87,7 +136,14 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold font-serif">MOLLY LASH</h1>
+          <div className="flex items-center gap-3">
+            <img 
+              src="https://cdn.poehali.dev/files/c9e8634e-8f7d-4f64-b115-b3b6cabf6cb5.jpg" 
+              alt="MOLLY LASH" 
+              className="h-10 w-10 rounded-full object-cover"
+            />
+            <h1 className="text-2xl font-bold font-serif">MOLLY LASH</h1>
+          </div>
           <div className="hidden md:flex gap-6">
             <a href="#services" className="hover:text-primary transition-colors">Услуги</a>
             <a href="#portfolio" className="hover:text-primary transition-colors">Портфолио</a>
@@ -179,14 +235,28 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="services" className="py-20 px-4 bg-muted/30">
+      <section 
+        id="services" 
+        ref={sectionRefs.services}
+        className={`py-20 px-4 bg-muted/30 transition-all duration-1000 ${
+          visibleSections.has('services') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container mx-auto">
           <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-12">
             Услуги и прайс
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
-              <Card key={index} className="animate-scale-in hover:shadow-lg transition-shadow">
+              <Card 
+                key={index} 
+                className="hover:shadow-lg transition-all duration-500"
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                  opacity: visibleSections.has('services') ? 1 : 0,
+                  transform: visibleSections.has('services') ? 'translateY(0)' : 'translateY(20px)'
+                }}
+              >
                 <CardContent className="p-6">
                   <h3 className="text-xl font-serif font-semibold mb-3">{service.title}</h3>
                   <p className="text-muted-foreground mb-4 text-sm">{service.description}</p>
@@ -204,7 +274,13 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="portfolio" className="relative py-20 px-4 overflow-hidden">
+      <section 
+        id="portfolio" 
+        ref={sectionRefs.portfolio}
+        className={`relative py-20 px-4 overflow-hidden transition-all duration-1000 ${
+          visibleSections.has('portfolio') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -221,9 +297,13 @@ const Index = () => {
             {portfolio.map((image, index) => (
               <div 
                 key={index} 
-                className="aspect-square overflow-hidden rounded-lg animate-scale-in"
+                className="aspect-square overflow-hidden rounded-lg transition-all duration-700"
                 style={{
-                  transform: `translateY(${(scrollY - 1000) * (0.05 * (index + 1))}px)`
+                  transform: visibleSections.has('portfolio') 
+                    ? `translateY(${(scrollY - 1000) * (0.05 * (index + 1))}px)` 
+                    : 'translateY(30px)',
+                  opacity: visibleSections.has('portfolio') ? 1 : 0,
+                  transitionDelay: `${index * 150}ms`
                 }}
               >
                 <img
@@ -237,7 +317,13 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="about" className="relative py-20 px-4 bg-muted/30 overflow-hidden">
+      <section 
+        id="about" 
+        ref={sectionRefs.about}
+        className={`relative py-20 px-4 bg-muted/30 overflow-hidden transition-all duration-1000 ${
+          visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -252,7 +338,7 @@ const Index = () => {
           </h2>
           <div className="text-center space-y-4">
             <p className="text-lg">
-              Меня зовут Молли, и я профессиональный лэшмейкер с 5-летним опытом работы.
+              Меня зовут Мария, и я профессиональный лэшмейкер и бровист с многолетним опытом работы.
               Прошла обучение в лучших школах индустрии красоты и регулярно повышаю квалификацию.
             </p>
             <p className="text-lg">
@@ -277,22 +363,42 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="reviews" className="py-20 px-4">
+      <section 
+        id="reviews" 
+        ref={sectionRefs.reviews}
+        className={`py-20 px-4 transition-all duration-1000 ${
+          visibleSections.has('reviews') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container mx-auto">
           <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-12">
             Отзывы клиентов
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {reviews.map((review, index) => (
-              <Card key={index} className="animate-fade-in">
+              <Card 
+                key={index} 
+                className="transition-all duration-700 hover:shadow-lg"
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                  opacity: visibleSections.has('reviews') ? 1 : 0,
+                  transform: visibleSections.has('reviews') ? 'translateY(0)' : 'translateY(20px)'
+                }}
+              >
                 <CardContent className="p-6">
-                  <div className="flex gap-1 mb-3">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <p className="font-semibold text-lg">{review.name}</p>
+                      <p className="text-sm text-muted-foreground">{review.date}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 mb-2">
                     {[...Array(review.rating)].map((_, i) => (
-                      <Icon key={i} name="Star" size={20} className="fill-primary text-primary" />
+                      <Icon key={i} name="Star" size={18} className="fill-primary text-primary" />
                     ))}
                   </div>
-                  <p className="text-muted-foreground mb-4">{review.text}</p>
-                  <p className="font-semibold">{review.name}</p>
+                  <p className="text-xs text-muted-foreground mb-3">{review.service}</p>
+                  <p className="text-muted-foreground text-sm">{review.text}</p>
                 </CardContent>
               </Card>
             ))}
@@ -300,7 +406,13 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="contacts" className="py-20 px-4 bg-muted/30">
+      <section 
+        id="contacts" 
+        ref={sectionRefs.contacts}
+        className={`py-20 px-4 bg-muted/30 transition-all duration-1000 ${
+          visibleSections.has('contacts') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-serif font-bold mb-12">
             Контакты
