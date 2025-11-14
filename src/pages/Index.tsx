@@ -138,11 +138,10 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img 
-              src="https://cdn.poehali.dev/files/c9e8634e-8f7d-4f64-b115-b3b6cabf6cb5.jpg" 
-              alt="MOLLY LASH" 
-              className="h-10 w-10 rounded-full object-cover"
+              src="https://cdn.poehali.dev/files/bd17e971-e399-47a6-b9b2-43a2c7243575.jpg" 
+              alt="MOLLY LASH Studio" 
+              className="h-12 w-12 object-contain"
             />
-            <h1 className="text-2xl font-bold font-serif">MOLLY LASH</h1>
           </div>
           <div className="hidden md:flex gap-6">
             <a href="#services" className="hover:text-primary transition-colors">Услуги</a>
@@ -202,7 +201,7 @@ const Index = () => {
         </div>
       </nav>
 
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      <section className="relative pt-20 pb-0 px-4 overflow-hidden min-h-screen flex items-center">
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -213,25 +212,44 @@ const Index = () => {
           <div className="absolute top-20 right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
         </div>
-        <div 
-          className="container mx-auto text-center animate-fade-in relative z-10"
-          style={{
-            transform: `translateY(${scrollY * 0.2}px)`
-          }}
-        >
-          <h2 className="text-5xl md:text-7xl font-serif font-bold mb-6">
-            Взгляд, который<br />очаровывает
-          </h2>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Профессиональное наращивание ресниц от сертифицированного мастера
-          </p>
-          <Button 
-            size="lg" 
-            className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8"
-            onClick={() => setIsBookingOpen(true)}
-          >
-            Записаться на процедуру
-          </Button>
+        <div className="container mx-auto relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div 
+              className="text-left animate-fade-in"
+              style={{
+                transform: `translateY(${scrollY * 0.2}px)`
+              }}
+            >
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-6">
+                Взгляд, который<br />очаровывает
+              </h2>
+              <p className="text-xl md:text-2xl text-muted-foreground mb-8">
+                Профессиональное наращивание ресниц от сертифицированного мастера
+              </p>
+              <Button 
+                size="lg" 
+                className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8"
+                onClick={() => setIsBookingOpen(true)}
+              >
+                Записаться на процедуру
+              </Button>
+            </div>
+            <div 
+              className="relative animate-fade-in"
+              style={{
+                transform: `translateY(${scrollY * 0.15}px)`
+              }}
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img 
+                  src="https://cdn.poehali.dev/files/8ac4e0b1-d08b-4611-9dfc-df3e9eba6aad.jpg" 
+                  alt="Наращивание ресниц" 
+                  className="w-full h-auto object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -338,7 +356,7 @@ const Index = () => {
           </h2>
           <div className="text-center space-y-4">
             <p className="text-lg">
-              Меня зовут Мария, и я профессиональный лэшмейкер и бровист с многолетним опытом работы.
+              Меня зовут Виктория, и я профессиональный лэшмейкер и бровист с многолетним опытом работы.
               Прошла обучение в лучших школах индустрии красоты и регулярно повышаю квалификацию.
             </p>
             <p className="text-lg">
