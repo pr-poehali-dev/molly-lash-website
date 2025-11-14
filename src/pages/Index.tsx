@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -10,6 +10,15 @@ const Index = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const services = [
     {
@@ -137,8 +146,23 @@ const Index = () => {
         </div>
       </nav>
 
-      <section className="pt-32 pb-20 px-4">
-        <div className="container mx-auto text-center animate-fade-in">
+      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            transform: `translateY(${scrollY * 0.5}px)`,
+            opacity: Math.max(0, 1 - scrollY / 500)
+          }}
+        >
+          <div className="absolute top-20 right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+        </div>
+        <div 
+          className="container mx-auto text-center animate-fade-in relative z-10"
+          style={{
+            transform: `translateY(${scrollY * 0.2}px)`
+          }}
+        >
           <h2 className="text-5xl md:text-7xl font-serif font-bold mb-6">
             Взгляд, который<br />очаровывает
           </h2>
@@ -180,14 +204,28 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="portfolio" className="py-20 px-4">
-        <div className="container mx-auto">
+      <section id="portfolio" className="relative py-20 px-4 overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            transform: `translateY(${(scrollY - 800) * 0.3}px)`
+          }}
+        >
+          <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+        </div>
+        <div className="container mx-auto relative z-10">
           <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-12">
             Портфолио
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {portfolio.map((image, index) => (
-              <div key={index} className="aspect-square overflow-hidden rounded-lg animate-scale-in">
+              <div 
+                key={index} 
+                className="aspect-square overflow-hidden rounded-lg animate-scale-in"
+                style={{
+                  transform: `translateY(${(scrollY - 1000) * (0.05 * (index + 1))}px)`
+                }}
+              >
                 <img
                   src={image}
                   alt={`Работа ${index + 1}`}
@@ -199,8 +237,16 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="about" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-4xl">
+      <section id="about" className="relative py-20 px-4 bg-muted/30 overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            transform: `translateY(${(scrollY - 1400) * 0.15}px)`
+          }}
+        >
+          <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+        </div>
+        <div className="container mx-auto max-w-4xl relative z-10">
           <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-12">
             О мастере
           </h2>
